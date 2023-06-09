@@ -14,7 +14,7 @@
 		var body =
 			'<div style="padding-left: 20px; padding-right: 20px;">' +
 			'<div class="row" style="clear:both; margin-bottom:20px; margin-top: 20px;">' +
-			'<div class="col-md-12" style="padding: 0 !important;">' +
+			'<div class="col-md-12 cart-header-container " style="padding: 0 !important;">' +
 			'<h4 class="winkelwagen-popup-h4">Toegevoegd aan je winkelmand</h4>' +
 			'<button class="winkelwagen-popup-buttonverderwinkelen" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"> <span>Verder winkelen</span></i></button>' +
 			"</div>" +
@@ -151,7 +151,7 @@
 	/* After DOM is ready */
 	$(document).ready(function () {
 		/* Open pop-up if blue banner appears in dom */
-		if ($(".woocommerce-message > a").html() == "Winkelwagen bekijken") {
+		if ($(".woocommerce-message > a").length && is_product_page) {
 			openModal(products, upsells);
 			$(".modal-dialog").addClass("modal-lg");
 			$(".modal-header").remove();
@@ -217,7 +217,6 @@
 							action: "clear_sesh",
 						},
 						success: function (data) {
-							console.log("session cleared");
 							btn.submit();
 						},
 					});

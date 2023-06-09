@@ -1,0 +1,99 @@
+/* HEADER OF THE POP-UP */
+
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,800;1,600&display=swap");
+
+.winkelwagen-popup-buttonverderwinkelen {
+	margin-left: auto;
+	border: 0px;
+	background-color: white;
+}
+
+.winkelwagen-popup-buttonverderwinkelen:hover SPAN {
+	text-decoration: underline;
+	color: black;
+
+	-webkit-text-decoration-color: #39c; /* Safari */
+	text-decoration-color: #39c;
+}
+
+.winkelwagen-popup-buttonverderwinkelen:hover .fa-times::before {
+	color: #39c;
+	-webkit-animation: spin 4s linear infinite;
+	-moz-animation: spin 4s linear infinite;
+	animation: spin 4s linear infinite;
+}
+
+@-moz-keyframes spin {
+	100% {
+		-moz-transform: rotate(360deg);
+	}
+}
+@-webkit-keyframes spin {
+	100% {
+		-webkit-transform: rotate(360deg);
+	}
+}
+@keyframes spin {
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+
+.cart-header-container {
+	display: flex;
+	background-color: white;
+	font-family: "Open Sans" !important;
+}
+
+/* text inside continue shopping */
+#bootstrap-show-modal-0 > div > div > div > div > div:nth-child(1) > div > button > i > span {
+	font-family: "Open Sans";
+}
+
+winkelwagen-popup-h4 {
+	font-family: "Open Sans";
+	margin-bottom: 0px;
+}
+
+.winkelwagen-popup-buttondiv {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+}
+
+.winkelwagen-popup-button {
+	background-color: rgb(51, 153, 204);
+	font-family: "Open Sans";
+	font-weight: 500;
+	color: white;
+	padding: 5px 10px 5px 10px;
+	text-decoration: none;
+	border: 0px;
+}
+
+.winkelwagen-popup-button {
+	background-color: #39c;
+}
+.winkelwagen-popup-button:hover {
+	box-shadow: 0 0 20px 1px rgb(128 128 128 / 40%);
+}
+
+div.winkelwagen-popup-buttondiv.col-lg-3.col-md-6.col-sm-12 > button > i {
+	margin-left: 6px;
+}
+#winkelwagenpopup-button-link {
+	text-decoration: none;
+	color: white;
+	font-family: "Open Sans";
+}
+
+.winkelwagen-popup-price .ex-btw {
+}
+
+.winkelwagen-popup-button > a {
+	padding: 0px !important;
+	margin: 0px;
+	background-color: #ffffff00 !important;
+}
