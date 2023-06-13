@@ -12,8 +12,8 @@
 	/* UI, open pop-up bootstrap */
 	function openModal(products, upsells) {
 		var body =
-			'<div style="padding-left: 20px; padding-right: 20px;">' +
-			'<div class="row" style="clear:both; margin-bottom:20px; margin-top: 20px;">' +
+			'<div class="" style="padding-left: 20px; padding-right: 20px;">' +
+			'<div class="row" style="clear:both; margin-bottom:15px; margin-top: 15px;">' +
 			'<div class="col-md-12 cart-header-container " style="padding: 0 !important;">' +
 			'<h4 class="winkelwagen-popup-h4">Toegevoegd aan je winkelmand</h4>' +
 			'<button class="winkelwagen-popup-buttonverderwinkelen" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"> <span>Verder winkelen</span></i></button>' +
@@ -23,72 +23,72 @@
 		product = products.shift();
 
 		body +=
-			'<div class="row" style="display: flex; justify-content: center; clear:both; border-bottom: 1px solid #e6e6e6 !important; border-top: 1px solid #e6e6e6 !important; margin-bottom: 20px; padding-top: 10px; padding-bottom: 10px;">' +
+			'<div class="row" style="display: flex; justify-content: center; clear:both; border-bottom: 1px solid #e6e6e6 !important; border-top: 1px solid #e6e6e6 !important; margin-bottom: 20px; padding-top: 20px; padding-bottom: 20px;">' +
 			'<div class="col-lg-2 col-md-6 col-sm-12" style="align-items: center;display: flex;justify-content: center;">' +
 			'<img src="' +
 			product["image"] +
 			'" width="100px"></img>' +
 			"</div>" +
-			'<div class="col-lg-3 col-md-6 col-sm-12" style="align-items: center;display: flex;justify-content: flex-start;">' +
+			'<div class="col-lg-3 col-md-6 col-sm-12 name-container" style="align-items: center;display: flex;justify-content: center;">' +
 			'<span class="winkelwagen-popup-name">' +
 			product["name"] +
 			"</span>" +
 			"</div>" +
-			'<div class="col-lg-1 col-md-6 col-sm-12" style="align-items: center;display: flex;justify-content: center;">' +
+			'<div class="col-lg-1 col-md-6 col-sm-12 quantity-container" style="align-items: center;display: flex;justify-content: center;">' +
 			'<span class="winkelwagen-popup-name">x' +
 			product["quantity"] +
 			"</span>" +
 			"</div>" +
-			'<div class="col-lg-3 col-md-6 col-sm-12" style="align-items: center;display: flex;justify-content: center; flex-direction: column;">' +
-			'<div class="winkelwagen-popup-price ex-btw"><span>€ ' +
+			'<div class="col-lg-3 col-md-6 col-sm-12 price-container" style="align-items: center;display: flex;justify-content: center; flex-direction: column;">' +
+			'<div class="winkelwagen-popup-price ex-btw"><span class="headProductPrice">€ ' +
 			Number(product["price"] * product["quantity"]).toLocaleString("nl-BE", {
 				minimumFractionDigits: 2,
 				maximumFractionDigits: 2,
 			}) +
-			"</span> Excl. btw</div>" +
+			"</span> <span class='headProduct-ex-btw'>Excl. btw</span></div>" +
 			'<div class="winkelwagen-popup-price inc-btw"><span>€ ' +
 			Number(product["price"] * product["quantity"] * 1.21).toLocaleString("nl-BE", {
 				minimumFractionDigits: 2,
 				maximumFractionDigits: 2,
 			}) +
-			"</span> Incl. btw</div>" +
+			"</span> <span class='headProduct-inc-btw'>Incl. btw</span></div>" +
 			"</div>" +
 			'<div class="winkelwagen-popup-buttondiv col-lg-3 col-md-6 col-sm-12"> ' +
-			'<button class="winkelwagen-popup-button"><a id="winkelwagenpopup-button-link" href="/winkelmand">Winkelmand</a><i class="fa fa-arrow-right"></i></button>' +
+			'<button class="button-winkelmand"><a id="winkelwagenpopup-button-link" href="/winkelmand">Winkelmand</a><i class="fa fa-arrow-right"></i></button>' +
 			"</div>" +
 			"</div>";
 
 		products.forEach((product) => {
 			body +=
-				'<div class="row" style="display: flex; justify-content: center; clear:both; border-bottom: 1px solid #e6e6e6 !important; border-top: 1px solid #e6e6e6 !important; margin-bottom: 20px; padding-top: 10px; padding-bottom: 10px;">' +
+				'<div class="row" style="display: flex; justify-content: center; clear:both; border-bottom: 1px solid #e6e6e6 !important; border-top: 1px solid #e6e6e6 !important; margin-bottom: 20px; padding-top: 20px; padding-bottom: 20px;">' +
 				'<div class="col-lg-2 col-md-6 col-sm-12" style="align-items: center;display: flex;justify-content: center;">' +
 				'<img src="' +
 				product["image"] +
 				'" width="100px"></img>' +
 				"</div>" +
-				'<div class="col-lg-3 col-md-6 col-sm-12" style="align-items: center;display: flex;justify-content: flex-start;">' +
+				'<div class="col-lg-3 col-md-6 col-sm-12 other-name-container" style="align-items: center;display: flex;justify-content: center;">' +
 				'<span class="winkelwagen-popup-name">' +
 				product["name"] +
 				"</span>" +
 				"</div>" +
-				'<div class="col-lg-1 col-md-6 col-sm-12" style="align-items: center;display: flex;justify-content: center;">' +
+				'<div class="col-lg-1 col-md-6 col-sm-12 other-quantity-container" style="align-items: center;display: flex;justify-content: center;">' +
 				'<span class="winkelwagen-popup-name">x' +
 				product["quantity"] +
 				"</span>" +
 				"</div>" +
-				'<div class="col-lg-3 col-md-6 col-sm-12" style="align-items: center;display: flex;justify-content: center; flex-direction: column;">' +
-				'<div class="winkelwagen-popup-price ex-btw"><span>€ ' +
+				'<div class="col-lg-3 col-md-6 col-sm-12 other-price-container" style="align-items: center;display: flex;justify-content: center; flex-direction: column;">' +
+				'<div class="winkelwagen-popup-price ex-btw"><span class="otherProductPrice">€ ' +
 				Number(product["price"] * product["quantity"]).toLocaleString("nl-BE", {
 					minimumFractionDigits: 2,
 					maximumFractionDigits: 2,
 				}) +
-				"</span> Excl. btw</div>" +
+				"</span> <span class='otherProduct-ex-btw'>Excl. btw</span></div>" +
 				'<div class="winkelwagen-popup-price inc-btw"><span>€ ' +
 				Number(product["price"] * product["quantity"] * 1.21).toLocaleString("nl-BE", {
 					minimumFractionDigits: 2,
 					maximumFractionDigits: 2,
 				}) +
-				"</span> Incl. btw</div>" +
+				"</span> <span class='otherProduct-inc-btw'>Incl. btw</span></div>" +
 				"</div>" +
 				'<div class="winkelwagen-popup-buttondiv col-lg-3 col-md-6 col-sm-12"> ' +
 				"</div>" +
@@ -96,35 +96,38 @@
 		});
 		if (upsells && upsells.length > 0) {
 			body +=
-				'<div class="row" style="margin-bottom: 20px;"><div class="col-md-12" style="text-align:center;"><h5 class="winkelwagen-popup-h5">Ook handig om gelijk mee te bestellen!</h5></div></div>' +
+				'<div class="row" style="margin-bottom: 15px;"><div class="col-md-12" style="text-align:center;"><h5 class="winkelwagen-popup-h5">Ook handig om gelijk mee te bestellen!</h5></div></div>' +
 				'<div class="products row" style="align-items: center; justify-content: center;">';
 			upsells.forEach((upsell) => {
 				body +=
-					'<div class="row" style="clear:both; border-bottom: 1px solid #e6e6e6 !important; border-top: 1px solid #e6e6e6 !important; margin-bottom: 20px; padding-top: 10px; padding-bottom: 10px;">' +
+					'<div class="row" style="clear:both; border-bottom: 1px solid #e6e6e6 !important; border-top: 1px solid #e6e6e6 !important; margin-bottom: 20px; padding-top: 20px; padding-bottom: 20px;">' +
 					'<div class="col-lg-3 col-md-6 col-sm-12" style="align-items: center;display: flex;justify-content: center;">' +
 					'<img src="' +
 					upsell["image"] +
 					'" width="100px"></img>' +
 					"</div>" +
-					'<div class="col-lg-3 col-md-6 col-sm-12" style="align-items: center;display: flex;justify-content: center;">' +
+					'<div class="col-lg-3 col-md-6 col-sm-12 upsell-name-container" style="align-items: center;display: flex;justify-content: center;">' +
 					'<span class="winkelwagen-popup-name"><a href="' +
 					upsell["link"] +
 					'" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">' +
 					upsell["name"] +
 					"</a></span>" +
 					"</div>" +
-					'<div class="col-lg-3 col-md-6 col-sm-12" style="align-items: center;display: flex;justify-content: center; flex-direction: column;">' +
-					'<div class="winkelwagen-popup-price ex-btw"><span>€ ' +
-					Number(upsell["price"]).toLocaleString("nl-BE", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) +
-					"</span> Excl. btw</div>" +
-					'<div class="winkelwagen-popup-price inc-btw"><span>€ ' +
-					Number(upsell["price"] * 1.21).toLocaleString("nl-BE", {
+					'<div class="col-lg-3 col-md-6 col-sm-12 upsell-price-container" style="align-items: center;display: flex;justify-content: center; flex-direction: column;">' +
+					'<div class="winkelwagen-popup-price ex-btw"><span class="upsellProductPrice">€ ' +
+					Number(product["price"] * product["quantity"]).toLocaleString("nl-BE", {
 						minimumFractionDigits: 2,
 						maximumFractionDigits: 2,
 					}) +
-					"</span> Incl. btw</div>" +
+					"</span> <span class='upsellProduct-ex-btw'>Excl. btw</span></div>" +
+					'<div class="winkelwagen-popup-price inc-btw"><span>€ ' +
+					Number(product["price"] * product["quantity"] * 1.21).toLocaleString("nl-BE", {
+						minimumFractionDigits: 2,
+						maximumFractionDigits: 2,
+					}) +
+					"</span> <span class='upsellProduct-inc-btw'>Incl. btw</span></div>" +
 					"</div>" +
-					'<div class="winkelwagen-popup-buttondiv col-lg-3 col-md-6 col-sm-12"> ' +
+					'<div class="winkelwagen-popup-buttondiv col-lg-3 col-md-6 col-sm-12 upsell-atc-container"> ' +
 					'<button class="winkelwagen-popup-button"><a href="?add-to-cart=' +
 					upsell["id"] +
 					'" data-open="0" data-quantity="1" class="button wp-element-button product_type_simple ajax_add_to_cart add_to_cart_button" data-product_id="' +
@@ -147,9 +150,37 @@
 		});
 	}
 
+	function waitForElm(selector) {
+		return new Promise((resolve) => {
+			if (document.querySelector(selector)) {
+				return resolve(document.querySelector(selector));
+			}
+
+			const observer = new MutationObserver((mutations) => {
+				if (document.querySelector(selector)) {
+					resolve(document.querySelector(selector));
+					observer.disconnect();
+				}
+			});
+
+			observer.observe(document.body, {
+				childList: true,
+				subtree: true,
+			});
+		});
+	}
+
 	/* Triggers */
 	/* After DOM is ready */
 	$(document).ready(function () {
+		$(document).on("click", ".winkelwagen-popup-button", function () {
+			$(this).find(".button").html("<i class='fa fa-spinner'></i> Toevoegen...");
+			waitForElm(".winkelwagen-popup-button > .added_to_cart").then((elm) => {
+				$(elm).hide();
+				$(elm).parent().find(".button").html("<i class='fa fa-check'></i> Toegevoegd");
+			});
+		});
+
 		/* Open pop-up if blue banner appears in dom */
 		if ($(".woocommerce-message > a").length && is_product_page) {
 			openModal(products, upsells);

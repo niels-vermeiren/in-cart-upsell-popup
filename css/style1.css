@@ -63,8 +63,8 @@ winkelwagen-popup-h4 {
 	color: white;
 }
 
-.winkelwagen-popup-button {
-	background-color: rgb(51, 153, 204);
+.button-winkelmand {
+	background-color: rgb(51, 153, 204) !important;
 	font-family: "Open Sans";
 	font-weight: 500;
 	color: white;
@@ -74,8 +74,23 @@ winkelwagen-popup-h4 {
 }
 
 .winkelwagen-popup-button {
-	background-color: #39c;
+	background-color: #31d438;
+	color: white;
+	font-family: "Open Sans";
+	font-weight: 500;
+	padding: 5px 10px 5px 10px;
+	text-decoration: none;
+	border: 0px;
 }
+
+.winkelwagen-popup-button > a {
+	font-weight: 500;
+}
+
+.winkelwagen-popup-button .button {
+	color: white;
+}
+
 .winkelwagen-popup-button:hover {
 	box-shadow: 0 0 20px 1px rgb(128 128 128 / 40%);
 }
@@ -90,10 +105,44 @@ div.winkelwagen-popup-buttondiv.col-lg-3.col-md-6.col-sm-12 > button > i {
 }
 
 .winkelwagen-popup-price .ex-btw {
+	font-weight: bold;
+}
+
+.winkelwagen-popup-price .inc-btw {
+	font-weight: bold;
 }
 
 .winkelwagen-popup-button > a {
 	padding: 0px !important;
 	margin: 0px;
+	margin-top: 0px !important;
 	background-color: #ffffff00 !important;
+}
+
+.headProduct-ex-btw,
+.otherProduct-ex-btw,
+.upsellProduct-ex-btw {
+	font-weight: bold;
+}
+
+.headProduct-inc-btw,
+.otherProduct-inc-btw,
+.upsellProduct-inc-btw {
+	font-weight: bold;
+}
+
+/*responsive tablet mode*/
+@media only screen and (max-width: 991px) {
+	.price-container,
+	.quantity-container {
+		margin-top: 10px;
+	}
+	.winkelwagen-popup-buttondiv {
+		margin-top: 15px !important;
+	}
+
+	.upsell-atc-container,
+	.upsell-price-container {
+		margin-top: 10px !important;
+	}
 }
