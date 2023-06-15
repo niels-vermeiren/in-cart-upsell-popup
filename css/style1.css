@@ -2,6 +2,17 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,800;1,600&display=swap");
 
+#popup-wrapper {
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.cart-header-wrapper {
+	clear: both;
+	margin-bottom: 15px;
+	margin-top: 15px;
+}
+
 .winkelwagen-popup-buttonverderwinkelen {
 	margin-left: auto;
 	border: 0px;
@@ -11,39 +22,36 @@
 .winkelwagen-popup-buttonverderwinkelen:hover SPAN {
 	text-decoration: underline;
 	color: black;
-
 	-webkit-text-decoration-color: #39c; /* Safari */
 	text-decoration-color: #39c;
 }
 
 .winkelwagen-popup-buttonverderwinkelen:hover .fa-times::before {
 	color: #39c;
-	-webkit-animation: spin 4s linear infinite;
-	-moz-animation: spin 4s linear infinite;
-	animation: spin 4s linear infinite;
-}
-
-@-moz-keyframes spin {
-	100% {
-		-moz-transform: rotate(360deg);
-	}
-}
-@-webkit-keyframes spin {
-	100% {
-		-webkit-transform: rotate(360deg);
-	}
-}
-@keyframes spin {
-	100% {
-		-webkit-transform: rotate(360deg);
-		transform: rotate(360deg);
-	}
 }
 
 .cart-header-container {
 	display: flex;
 	background-color: white;
 	font-family: "Open Sans" !important;
+	padding: 0 !important;
+}
+
+.head-product-wrapper,
+.other-product-wrapper,
+.upsell-wrapper {
+	display: flex;
+	justify-content: center;
+	clear: both;
+	border-bottom: 1px solid #e6e6e6 !important;
+	border-top: 1px solid #e6e6e6 !important;
+	margin-bottom: 20px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+.upsell-title-wrapper {
+	margin-bottom: 15px;
 }
 
 /* text inside continue shopping */
@@ -85,6 +93,8 @@ winkelwagen-popup-h4 {
 
 .winkelwagen-popup-button > a {
 	font-weight: 500;
+	font-family: "Open Sans";
+	font-size: 18px !important;
 }
 
 .winkelwagen-popup-button .button {
@@ -92,6 +102,10 @@ winkelwagen-popup-h4 {
 }
 
 .winkelwagen-popup-button:hover {
+	box-shadow: 0 0 20px 1px rgb(128 128 128 / 40%);
+}
+
+.button-winkelmand:hover {
 	box-shadow: 0 0 20px 1px rgb(128 128 128 / 40%);
 }
 
@@ -131,6 +145,11 @@ div.winkelwagen-popup-buttondiv.col-lg-3.col-md-6.col-sm-12 > button > i {
 	font-weight: bold;
 }
 
+.woocommerce img,
+.woocommerce-page img {
+	width: 100%;
+}
+
 /*responsive tablet mode*/
 @media only screen and (max-width: 991px) {
 	.price-container,
@@ -144,5 +163,54 @@ div.winkelwagen-popup-buttondiv.col-lg-3.col-md-6.col-sm-12 > button > i {
 	.upsell-atc-container,
 	.upsell-price-container {
 		margin-top: 10px !important;
+	}
+
+	.woocommerce img,
+	.woocommerce-page img {
+		width: 100% !important;
+	}
+}
+
+.image-container,
+.other-image-container,
+.upsell-image-container,
+.name-container,
+.quantity-container,
+.other-image-container,
+.other-name-container,
+.other-quantity-container,
+.upsell-image-container,
+.upsell-name-container {
+	align-items: center;
+	display: flex;
+	justify-content: center;
+}
+
+.price-container,
+.other-price-container,
+.upsell-price-container {
+	align-items: center;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+}
+/*responsive phone mode*/
+@media only screen and (max-width: 767px) {
+	.woocommerce img,
+	.woocommerce-page img {
+		width: 80% !important;
+	}
+	.image-container,
+	.other-image-container,
+	.upsell-image-container {
+		margin-bottom: 15px;
+	}
+}
+
+/*responsive small phone mode*/
+@media only screen and (max-width: 500px) {
+	.woocommerce img,
+	.woocommerce-page img {
+		width: 100% !important;
 	}
 }
