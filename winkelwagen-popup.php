@@ -7,6 +7,9 @@ Version: 1.0
 Author: Niels Vermeiren
 */
 
+
+include "options.php";
+
 class PopupUpsellCart
 {
     public function __construct()
