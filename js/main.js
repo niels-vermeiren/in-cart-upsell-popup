@@ -1,12 +1,54 @@
-(function ($, products, upsells, is_product_page, ajax_object) {
+(function ($, products, upsells, is_product_page, ajax_object, options) {
 	/* Remove blue success banner */
 	if (is_product_page) {
 		var element = document.createElement("style"),
 			sheet;
 		document.head.appendChild(element);
 		sheet = element.sheet;
+
+		let rules = [];
 		let cs = "div.woocommerce-notices-wrapper { display: none; }";
-		sheet.insertRule(cs, 0);
+		rules.push(cs);
+		let cs0 = "";
+		let cs1 = "";
+		let cs11 = "";
+		if (options["id_primary_color"]) {
+			cs1 += " .button-winkelmand { background-color: " + options["id_primary_color"] + " !important; }";
+			cs0 +=
+				".winkelwagen-popup-buttonverderwinkelen:hover SPAN { text-decoration-color: " +
+				options["id_primary_color"] +
+				" !important; }";
+			cs11 +=
+				".winkelwagen-popup-buttonverderwinkelen:hover .fa-times::before {color: " +
+				options["id_primary_color"] +
+				"; !important}";
+			rules.push(cs1);
+			rules.push(cs0);
+			rules.push(cs11);
+		}
+		let cs2 = "";
+		if (options["id_secondary_color"]) {
+			cs2 += " .winkelwagen-popup-button { background-color: " + options["id_secondary_color"] + " !important; }";
+			rules.push(cs2);
+		}
+
+		let cs3 = "";
+		if (options["id_title_color"]) {
+			cs3 += ".winkelwagen-popup-h4 { color: " + options["id_title_color"] + " !important}";
+			rules.push(cs3);
+		}
+
+		let cs5 = "";
+		if (options["id_upsell_title_color"]) {
+			cs5 += ".winkelwagen-popup-title { color: " + options["id_upsell_title_color"] + " !important}";
+			rules.push(cs5);
+		}
+
+		var i = 0;
+		rules.forEach((rule) => {
+			sheet.insertRule(rule, i);
+			i++;
+		});
 	}
 
 	class PopupBuilder {
@@ -26,13 +68,18 @@
 			this.html +=
 				'<div class="row cart-header-wrapper">' +
 				'<div class="col-md-12 cart-header-container">' +
-				'<h4 class="winkelwagen-popup-h4">Toegevoegd aan je winkelmand</h4>' +
-				'<button class="winkelwagen-popup-buttonverderwinkelen" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"> <span>Verder winkelen</span></i></button>' +
+				'<h4 class="winkelwagen-popup-h4">' +
+				(options["id_title_content"] ? options["id_title_content"] : "Item added to your cart") +
+				"</h4>" +
+				'<button class="winkelwagen-popup-buttonverderwinkelen" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times"> <span>' +
+				(options["id_close_popup_content"] ? options["id_close_popup_content"] : "Continue shopping") +
+				"</span></i></button>" +
 				"</div>" +
 				"</div>";
 		}
 
 		buildHeadProduct(product) {
+			var options_locale = options["id_separator"] && options["id_separator"] == "decimal_comma" ? "nl-BE" : "en-US";
 			this.html +=
 				'<div class="row head-product-wrapper">' +
 				'<div class="col-lg-2 col-md-6 col-sm-12 image-container">' +
@@ -50,22 +97,34 @@
 				product["quantity"] +
 				"</span>" +
 				"</div>" +
-				'<div class="col-lg-3 col-md-6 col-sm-12 price-container" style="">' +
-				'<div class="winkelwagen-popup-price ex-btw"><span class="headProductPrice">€ ' +
-				Number(product["price"] * product["quantity"]).toLocaleString("nl-BE", {
-					minimumFractionDigits: 2,
-					maximumFractionDigits: 2,
-				}) +
-				"</span> <span class='headProduct-ex-btw'>Excl. btw</span></div>" +
-				'<div class="winkelwagen-popup-price inc-btw"><span>€ ' +
-				Number(product["price"] * product["quantity"] * 1.21).toLocaleString("nl-BE", {
-					minimumFractionDigits: 2,
-					maximumFractionDigits: 2,
-				}) +
-				"</span> <span class='headProduct-inc-btw'>Incl. btw</span></div>" +
+				'<div class="col-lg-3 col-md-6 col-sm-12 price-container" style="">';
+
+			if (options["id_excl_vat"] && options["id_excl_vat"] == "on") {
+				this.html +=
+					'<div class="winkelwagen-popup-price ex-btw"><span class="headProductPrice">€ ' +
+					Number(product["price"] * product["quantity"]).toLocaleString(options_locale, {
+						minimumFractionDigits: 2,
+						maximumFractionDigits: 2,
+					}) +
+					"</span> <span class='headProduct-ex-btw'>Excl. btw</span></div>";
+			}
+
+			if (options["id_incl_vat"] && options["id_incl_vat"] == "on") {
+				this.html +=
+					'<div class="winkelwagen-popup-price inc-btw"><span>€ ' +
+					Number(product["price"] * product["quantity"] * 1.21).toLocaleString(options_locale, {
+						minimumFractionDigits: 2,
+						maximumFractionDigits: 2,
+					}) +
+					"</span> <span class='headProduct-inc-btw'>Incl. btw</span></div>";
+			}
+
+			this.html +=
 				"</div>" +
 				'<div class="winkelwagen-popup-buttondiv col-lg-3 col-md-6 col-sm-12"> ' +
-				'<button class="button-winkelmand"><a id="winkelwagenpopup-button-link" href="/winkelmand">Winkelmand</a><i class="fa fa-arrow-right"></i></button>' +
+				'<button class="button-winkelmand"><a id="winkelwagenpopup-button-link" href="/winkelmand">' +
+				(options["id_goto_cart_content"] ? options["id_goto_cart_content"] : "Go to cart") +
+				'</a><i class="fa fa-arrow-right"></i></button>' +
 				"</div>" +
 				"</div>";
 		}
@@ -89,33 +148,45 @@
 					product["quantity"] +
 					"</span>" +
 					"</div>" +
-					'<div class="col-lg-3 col-md-6 col-sm-12 other-price-container">' +
-					'<div class="winkelwagen-popup-price ex-btw"><span class="otherProductPrice">€ ' +
-					Number(product["price"] * product["quantity"]).toLocaleString("nl-BE", {
-						minimumFractionDigits: 2,
-						maximumFractionDigits: 2,
-					}) +
-					"</span> <span class='otherProduct-ex-btw'>Excl. btw</span></div>" +
-					'<div class="winkelwagen-popup-price inc-btw"><span>€ ' +
-					Number(product["price"] * product["quantity"] * 1.21).toLocaleString("nl-BE", {
-						minimumFractionDigits: 2,
-						maximumFractionDigits: 2,
-					}) +
-					"</span> <span class='otherProduct-inc-btw'>Incl. btw</span></div>" +
-					"</div>" +
-					'<div class="winkelwagen-popup-buttondiv col-lg-3 col-md-6 col-sm-12"> ' +
-					"</div>" +
-					"</div>";
+					'<div class="col-lg-3 col-md-6 col-sm-12 other-price-container">';
+
+				if (options["id_excl_vat"] && options["id_excl_vat"] == "on") {
+					this.html +=
+						'<div class="winkelwagen-popup-price ex-btw"><span class="otherProductPrice">€ ' +
+						Number(product["price"] * product["quantity"]).toLocaleString(options_locale, {
+							minimumFractionDigits: 2,
+							maximumFractionDigits: 2,
+						}) +
+						"</span> <span class='otherProduct-ex-btw'>Excl. btw</span></div>";
+				}
+
+				if (options["id_incl_vat"] && options["id_incl_vat"] == "on") {
+					this.html +=
+						'<div class="winkelwagen-popup-price inc-btw"><span>€ ' +
+						Number(product["price"] * product["quantity"] * 1.21).toLocaleString(options_locale, {
+							minimumFractionDigits: 2,
+							maximumFractionDigits: 2,
+						}) +
+						"</span> <span class='otherProduct-inc-btw'>Incl. btw</span></div>";
+				}
+
+				this.html +=
+					"</div>" + '<div class="winkelwagen-popup-buttondiv col-lg-3 col-md-6 col-sm-12"> ' + "</div>" + "</div>";
 			});
 		}
 
 		buildUpsellTitle() {
 			this.html +=
-				'<div class="upsell-title-wrapper"><div class="col-md-12" style="text-align:center;"><h5 class="winkelwagen-popup-title">Ook handig om gelijk mee te bestellen!</h5></div></div>' +
+				'<div class="upsell-title-wrapper"><div class="col-md-12" style="text-align:center;"><h5 class="winkelwagen-popup-title">' +
+				(options["id_upsell_title_content"]
+					? options["id_upsell_title_content"]
+					: "Customers who bought this also bought") +
+				"</h5></div></div>" +
 				'<div class="products row" style="align-items: center; justify-content: center;">';
 		}
 
 		buildUpsells(upsells) {
+			var options_locale = options["id_separator"] && options["id_separator"] == "decimal_comma" ? "nl-BE" : "en-US";
 			upsells.forEach((upsell) => {
 				this.html +=
 					'<div class="row upsell-wrapper">' +
@@ -131,26 +202,37 @@
 					upsell["name"] +
 					"</a></span>" +
 					"</div>" +
-					'<div class="col-lg-3 col-md-6 col-sm-12 upsell-price-container">' +
-					'<div class="winkelwagen-popup-price ex-btw"><span class="upsellProductPrice">€ ' +
-					Number(upsell["price"] * 1).toLocaleString("nl-BE", {
-						minimumFractionDigits: 2,
-						maximumFractionDigits: 2,
-					}) +
-					"</span> <span class='upsellProduct-ex-btw'>Excl. btw</span></div>" +
-					'<div class="winkelwagen-popup-price inc-btw"><span>€ ' +
-					Number(upsell["price"] * 1 * 1.21).toLocaleString("nl-BE", {
-						minimumFractionDigits: 2,
-						maximumFractionDigits: 2,
-					}) +
-					"</span> <span class='upsellProduct-inc-btw'>Incl. btw</span></div>" +
+					'<div class="col-lg-3 col-md-6 col-sm-12 upsell-price-container">';
+
+				if (options["id_excl_vat"] && options["id_excl_vat"] == "on") {
+					this.html +=
+						'<div class="winkelwagen-popup-price ex-btw"><span class="upsellProductPrice">€ ' +
+						Number(upsell["price"]).toLocaleString(options_locale, {
+							minimumFractionDigits: 2,
+							maximumFractionDigits: 2,
+						}) +
+						"</span> <span class='upsellProduct-ex-btw'>Excl. btw</span></div>";
+				}
+
+				if (options["id_incl_vat"] && options["id_incl_vat"] == "on") {
+					this.html +=
+						'<div class="winkelwagen-popup-price inc-btw"><span>€ ' +
+						Number(upsell["price"] * 1.21).toLocaleString(options_locale, {
+							minimumFractionDigits: 2,
+							maximumFractionDigits: 2,
+						}) +
+						"</span> <span class='upsellProduct-inc-btw'>Incl. btw</span></div>";
+				}
+				this.html +=
 					"</div>" +
 					'<div class="winkelwagen-popup-buttondiv col-lg-3 col-md-6 col-sm-12 upsell-atc-container"> ' +
 					'<button class="winkelwagen-popup-button"><a href="?add-to-cart=' +
 					upsell["id"] +
 					'" data-open="0" data-quantity="1" class="button wp-element-button product_type_simple ajax_add_to_cart add_to_cart_button" data-product_id="' +
 					upsell["id"] +
-					'" aria-label="Toevoegen" rel="nofollow">Toevoegen</a></button>' +
+					'" aria-label="Toevoegen" rel="nofollow">' +
+					(options["id_upsell_addtocart_content"] ? options["id_upsell_addtocart_content"] : "Add to cart") +
+					"</a></button>" +
 					"</div>" +
 					"</div>";
 			});
@@ -210,11 +292,40 @@
 
 	/* After DOM is ready */
 	$(document).ready(function () {
+		if ($(".primary-color-field").length > 0) {
+			$(".primary-color-field").wpColorPicker();
+		}
+
+		if ($(".secondary-color-field").length > 0) {
+			$(".secondary-color-field").wpColorPicker();
+		}
+
+		if ($(".title-color-field").length > 0) {
+			$(".title-color-field").wpColorPicker();
+		}
+
+		if ($(".upsell-title-color-field").length > 0) {
+			$(".upsell-title-color-field").wpColorPicker();
+		}
+
 		$(document).on("click", ".winkelwagen-popup-button", function () {
-			$(this).find(".button").html("<i class='fa fa-spinner'></i> Toevoegen...");
+			$(this)
+				.find(".button")
+				.html(
+					"<i class='fa fa-spinner'></i> " +
+						(options["id_upsell_addedtocart_content"] ? options["id_upsell_addingtocart_content"] : "Adding..")
+				);
 			waitForElm(".winkelwagen-popup-button > .added_to_cart").then((elm) => {
 				$(elm).hide();
-				$(elm).parent().find(".button").html("<i class='fa fa-check'></i> Toegevoegd");
+				$(elm)
+					.parent()
+					.find(".button")
+					.html(
+						"<i class='fa fa-check'></i> " +
+							(options["id_upsell_addedtocart_content"]
+								? options["id_upsell_addedtocart_content"]
+								: "Item added to your cart")
+					);
 			});
 		});
 
@@ -295,4 +406,4 @@
 			});
 		});
 	});
-})(jQuery, products, upsells, is_product_page, ajax_object);
+})(jQuery, products, upsells, is_product_page, ajax_object, options);

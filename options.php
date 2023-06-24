@@ -37,28 +37,25 @@ class OptionsPage
     <h1>Upsell Pop-up Settings</h1>
     <form method="post" action="options.php">
         <div id='menu'><a href='?page=upsell-popup-options&section=general'>General</a> | <a
-                href='?page=upsell-popup-options&section=style'>Style</a></div>
+                href='?page=upsell-popup-options&section=style'>Style</a> | <a
+                href='?page=upsell-popup-options&section=content'>Content</a></div>
         <?php
         settings_fields('my_option_group');
-        if(isset($_GET['section']) && $_GET['section'] == 'general') {
-            echo "<div style='display:none'>";
-            do_settings_sections('my-setting-style');
-            echo "</div>";
-            do_settings_sections('my-setting-general');
-        }
 
-        if(isset($_GET['section']) && $_GET['section'] == 'style') {
-            echo "<div style='display:none'>";
-            do_settings_sections('my-setting-general');
-            echo "</div>";
-            do_settings_sections('my-setting-style');
-        }
+        $sections = array(
+            'my-setting-general' => 'general',
+            'my-setting-style' => 'style',
+            'my-setting-content' => 'content'
+        );
 
-        if(!isset($_GET['section'])) {
-            echo "<div style='display:none'>";
-            do_settings_sections('my-setting-style');
-            echo "</div>";
-            do_settings_sections('my-setting-general');
+        foreach($sections as $index => $section) {
+            if(isset($_GET['section']) && $_GET['section'] == $section) {
+                do_settings_sections($index);
+            } else {
+                echo "<div style='display:none'>";
+                do_settings_sections($index);
+                echo "</div>";
+            }
         }
 
         submit_button();
@@ -90,9 +87,16 @@ class OptionsPage
 
         add_settings_section(
             'style_settings_id', // ID
-            'Style settings', // Title
+            'Style', // Title
             array( $this, 'print_section_info' ), // Callback
             'my-setting-style' // Page
+        );
+
+        add_settings_section(
+            'content_settings_id', // ID
+            'Content', // Title
+            array( $this, 'print_section_info' ), // Callback
+            'my-setting-content' // Page
         );
 
         add_settings_field(
@@ -128,11 +132,90 @@ class OptionsPage
         );
 
         add_settings_field(
-            'id_border_radius', // ID
-            'Border radius (%)', // Title
-            array( $this, 'id_border_radius_callback' ), // Callback
+            'id_primary_color', // ID
+            'Primary color', // Title
+            array( $this, 'id_primary_color_callback' ), // Callback
             'my-setting-style', // Page
             'style_settings_id' // Section
+        );
+
+        add_settings_field(
+            'id_secondary_color', // ID
+            'Secondary color', // Title
+            array( $this, 'id_secondary_color_callback' ), // Callback
+            'my-setting-style', // Page
+            'style_settings_id' // Section
+        );
+
+        add_settings_field(
+            'id_title_color', // ID
+            'Pop-up title color', // Title
+            array( $this, 'id_title_color_callback' ), // Callback
+            'my-setting-style', // Page
+            'style_settings_id' // Section
+        );
+
+
+
+        add_settings_field(
+            'id_upsell_title_color', // ID
+            'Upsell title color', // Title
+            array( $this, 'id_upsell_title_color_callback' ), // Callback
+            'my-setting-style', // Page
+            'style_settings_id' // Section
+        );
+
+        add_settings_field(
+            'id_title_content', // ID
+            'Pop-up title', // Title
+            array( $this, 'id_title_content_callback' ), // Callback
+            'my-setting-content', // Page
+            'content_settings_id' // Section
+        );
+        add_settings_field(
+            'id_upsell_title_content', // ID
+            'Upsell title', // Title
+            array( $this, 'id_upsell_title_content_callback' ), // Callback
+            'my-setting-content', // Page
+            'content_settings_id' // Section
+        );
+
+
+        add_settings_field(
+            'id_goto_cart_content', // ID
+            'Go to cart button', // Title
+            array( $this, 'id_goto_cart_content_callback' ), // Callback
+            'my-setting-content', // Page
+            'content_settings_id' // Section
+        );
+        add_settings_field(
+            'id_close_popup_content', // ID
+            'Close pop-up/Continue shopping', // Title
+            array( $this, 'id_close_popup_content_callback' ), // Callback
+            'my-setting-content', // Page
+            'content_settings_id' // Section
+        );
+        add_settings_field(
+            'id_upsell_addtocart_content', // ID
+            'Upsell add to cart button', // Title
+            array( $this, 'id_upsell_addtocart_content_callback' ), // Callback
+            'my-setting-content', // Page
+            'content_settings_id' // Section
+        );
+        add_settings_field(
+            'id_upsell_addedtocart_content', // ID
+            'Upsell successfully added to cart', // Title
+            array( $this, 'id_upsell_addedtocart_content_callback' ), // Callback
+            'my-setting-content', // Page
+            'content_settings_id' // Section
+        );
+
+        add_settings_field(
+            'id_upsell_addingtocart_content', // ID
+            'Upsell adding to cart', // Title
+            array( $this, 'id_upsell_addingtocart_content_callback' ), // Callback
+            'my-setting-content', // Page
+            'content_settings_id' // Section
         );
 
     }
@@ -162,20 +245,47 @@ class OptionsPage
         if(isset($input['id_style'])) {
             $new_input['id_style'] = sanitize_text_field($input['id_style']);
         }
-
-        if(isset($input['id_border_radius'])) {
-            $new_input['id_border_radius'] = $input['id_border_radius'];
+        if(isset($input['id_title_content'])) {
+            $new_input['id_title_content'] = sanitize_text_field($input['id_title_content']);
+        }
+        if(isset($input['id_upsell_title_content'])) {
+            $new_input['id_upsell_title_content'] = sanitize_text_field($input['id_upsell_title_content']);
         }
 
+        if(isset($input['id_goto_cart_content'])) {
+            $new_input['id_goto_cart_content'] = sanitize_text_field($input['id_goto_cart_content']);
+        }
+        if(isset($input['id_close_popup_content'])) {
+            $new_input['id_close_popup_content'] = sanitize_text_field($input['id_close_popup_content']);
+        }
+        if(isset($input['id_upsell_addtocart_content'])) {
+            $new_input['id_upsell_addtocart_content'] = sanitize_text_field($input['id_upsell_addtocart_content']);
+        }
+        if(isset($input['id_upsell_addedtocart_content'])) {
+            $new_input['id_upsell_addedtocart_content'] = sanitize_text_field($input['id_upsell_addedtocart_content']);
+        }
+        if(isset($input['id_upsell_addingtocart_content'])) {
+            $new_input['id_upsell_addingtocart_content'] = sanitize_text_field($input['id_upsell_addingtocart_content']);
+        }
 
-        return $new_input;
-    }
+        if(isset($input['id_primary_color'])) {
+            $new_input['id_primary_color'] = $input['id_primary_color'];
+        }
 
-    public function sanitize_style($input)
-    {
-        $new_input = array();
-        if(isset($input['id_border_radius'])) {
-            $new_input['id_border_radius'] = $input['id_border_radius'];
+        if(isset($input['id_secondary_color'])) {
+            $new_input['id_secondary_color'] = $input['id_secondary_color'];
+        }
+
+        if(isset($input['id_title_color'])) {
+            $new_input['id_title_color'] = $input['id_title_color'];
+        }
+
+        if(isset($input['id_upsell_title_color'])) {
+            $new_input['id_upsell_title_color'] = $input['id_upsell_title_color'];
+        }
+
+        if(isset($input['id_separator'])) {
+            $new_input['id_separator'] = $input['id_separator'];
         }
 
         return $new_input;
@@ -246,16 +356,133 @@ class OptionsPage
     /**
      * Get the settings option array and print one of its values
      */
-    public function id_border_radius_callback()
+    public function id_primary_color_callback()
     {
 
         printf(
-            '<input type="number" id="id_border_radius" name="my_option_name[id_border_radius]" value="%s" />',
-            isset($this->options['id_border_radius']) ? $this->options['id_border_radius'] : 0
+            '<input name="my_option_name[id_primary_color]" class="primary-color-field" type="text" value="%s" data-default-color="#effeff" />',
+            isset($this->options['id_primary_color']) ? $this->options['id_primary_color'] : "#effeff"
+        );
+    }
+
+    /**
+     * Get the settings option array and print one of its values
+     */
+    public function id_secondary_color_callback()
+    {
+
+        printf(
+            '<input name="my_option_name[id_secondary_color]" class="secondary-color-field" type="text" value="%s" data-default-color="#effeff" />',
+            isset($this->options['id_secondary_color']) ? $this->options['id_secondary_color'] : "#effeff"
+        );
+    }
+    /**
+     * Get the settings option array and print one of its values
+     */
+    public function id_title_color_callback()
+    {
+
+        printf(
+            '<input name="my_option_name[id_title_color]" class="title-color-field" type="text" value="%s" data-default-color="#effeff" />',
+            isset($this->options['id_title_color']) ? $this->options['id_title_color'] : "#effeff"
+        );
+    }
+
+    /**
+     * Get the settings option array and print one of its values
+     */
+    public function id_upsell_title_color_callback()
+    {
+
+        printf(
+            '<input name="my_option_name[id_upsell_title_color]" class="upsell-title-color-field" type="text" value="%s" data-default-color="#effeff" />',
+            isset($this->options['id_upsell_title_color']) ? $this->options['id_upsell_title_color'] : "#effeff"
+        );
+    }
+    /**
+     * Get the settings option array and print one of its values
+     */
+    public function id_title_content_callback()
+    {
+
+        printf(
+            '<input name="my_option_name[id_title_content]" class="id_title_content-field" type="text" value="%s"  />',
+            isset($this->options['id_title_content']) ? $this->options['id_title_content'] : ""
+        );
+    }
+    /**
+     * Get the settings option array and print one of its values
+     */
+    public function id_upsell_title_content_callback()
+    {
+
+        printf(
+            '<input name="my_option_name[id_upsell_title_content]" class="id_upsell_title_content-field" type="text" value="%s"  />',
+            isset($this->options['id_upsell_title_content']) ? $this->options['id_upsell_title_content'] : ""
+        );
+    }
+
+    /**
+     * Get the settings option array and print one of its values
+     */
+    public function id_goto_cart_content_callback()
+    {
+
+        printf(
+            '<input name="my_option_name[id_goto_cart_content]" class="id_goto_cart_content-field" type="text" value="%s"  />',
+            isset($this->options['id_goto_cart_content']) ? $this->options['id_goto_cart_content'] : "Go to cart"
+        );
+    }
+    /**
+     * Get the settings option array and print one of its values
+     */
+    public function id_close_popup_content_callback()
+    {
+
+        printf(
+            '<input name="my_option_name[id_close_popup_content]" class="id_close_popup_content-field" type="text" value="%s"  />',
+            isset($this->options['id_close_popup_content']) ? $this->options['id_close_popup_content'] : "Continue shopping"
+        );
+    }
+    /**
+     * Get the settings option array and print one of its values
+     */
+    public function id_upsell_addtocart_content_callback()
+    {
+
+        printf(
+            '<input name="my_option_name[id_upsell_addtocart_content]" class="id_upsell_addtocart_content-field" type="text" value="%s"  />',
+            isset($this->options['id_upsell_addtocart_content']) ? $this->options['id_upsell_addtocart_content'] : "Add to cart"
+        );
+    }
+    /**
+     * Get the settings option array and print one of its values
+     */
+    public function id_upsell_addedtocart_content_callback()
+    {
+
+        printf(
+            '<input name="my_option_name[id_upsell_addedtocart_content]" class="id_upsell_addedtocart_content-field" type="text" value="%s"  />',
+            isset($this->options['id_upsell_addedtocart_content']) ? $this->options['id_upsell_addedtocart_content'] : "Added to cart"
+        );
+    }
+    /**
+     * Get the settings option array and print one of its values
+     */
+    public function id_upsell_addingtocart_content_callback()
+    {
+
+        printf(
+            '<input name="my_option_name[id_upsell_addingtocart_content]" class="id_upsell_addingtocart_content-field" type="text" value="%s"  />',
+            isset($this->options['id_upsell_addingtocart_content']) ? $this->options['id_upsell_addingtocart_content'] : "Adding.."
         );
     }
 
 
-}
+    public function get_options()
+    {
+        return $this->options;
+    }
 
-$options = new OptionsPage();
+
+}

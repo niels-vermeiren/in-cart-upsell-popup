@@ -12,10 +12,17 @@ include "options.php";
 
 class PopupUpsellCart
 {
+    private $options;
     public function __construct()
     {
+        $this->options = new OptionsPage();
+        $this->options = get_option('my_option_name', array());
+
+        wp_enqueue_style('wp-color-picker');
+        wp_enqueue_script('wp-color-picker');
         add_filter('woocommerce_add_cart_item_data', array($this, 'addedToCartListener'), 10, 4);
         add_action('wp_enqueue_scripts', array($this, 'themeslug_enqueue_script'));
+        add_action('admin_enqueue_scripts', array($this, 'themeslug_enqueue_script'));
         add_action("wp_ajax_get_productinfo", array($this,"get_productinfo"));
         add_action("wp_ajax_nopriv_get_productinfo", array($this,"get_productinfo"));
         add_action("wp_ajax_clear_sesh", array($this, "clear_sesh"));
@@ -67,13 +74,19 @@ class PopupUpsellCart
         $products = array();
 
         //Scripts
+
+        wp_enqueue_style('wp-color-picker');
         wp_enqueue_style('styleicons', "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css", false);
         wp_enqueue_style('style', plugin_dir_url(__FILE__) . "css/bootstrap.min.css", false);
         wp_enqueue_script('jsboot', plugin_dir_url(__FILE__) . "js/bootstrap.min.js", false);
-        wp_enqueue_style('style1', plugin_dir_url(__FILE__) . "css/style1.css", false);
         wp_enqueue_script('jsmodal', plugin_dir_url(__FILE__) . "js/bootstrap-show-modal.js", false);
         wp_enqueue_script('jscookie', plugin_dir_url(__FILE__) . "js/jquery.cookie.min.js", false);
         wp_enqueue_script('jslanpopup', plugin_dir_url(__FILE__) . "js/main.js", false);
+
+        if($this->options['id_style'] && $this->options['id_style'] == 'style1') {
+            wp_enqueue_style('style1', plugin_dir_url(__FILE__) . "css/style1.css", false);
+        }
+
 
         if(isset($_SESSION['headproduct'])) {
             //get head cart item info
@@ -150,6 +163,8 @@ class PopupUpsellCart
         wp_localize_script("jslanpopup", "upsells", $upsellsShow);
         wp_localize_script("jslanpopup", "is_product_page", is_product());
         wp_localize_script('jslanpopup', 'ajax_object', array( 'ajaxurl' => admin_url('admin-ajax.php')));
+        wp_localize_script("jslanpopup", "options", $this->options);
+        wp_localize_script("jslanpopup", "is_admin", is_admin());
     }
 
     public function get_productinfo()
